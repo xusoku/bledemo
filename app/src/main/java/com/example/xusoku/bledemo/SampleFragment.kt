@@ -19,15 +19,24 @@ package com.example.xusoku.bledemo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.xusoku.bledemo.api.ApiService
+import com.example.xusoku.bledemo.model.film
+import com.squareup.okhttp.Callback
+import com.squareup.okhttp.Request
+import com.squareup.okhttp.Response
 import kotlinx.android.synthetic.main.fragment_mian.*
-import org.jetbrains.anko.find
+import org.jetbrains.anko.async
+import retrofit.Call
+import retrofit.GsonConverterFactory
+import retrofit.Retrofit
+import java.io.IOException
 
 /**
- * Created by Iiro Krankka (http://github.com/roughike)
  */
 class SampleFragment : Fragment() {
 
@@ -35,20 +44,51 @@ class SampleFragment : Fragment() {
         val textView = TextView(activity)
         textView.text = arguments?.getString(ARG_TEXT)?:""
         var view = inflater?.inflate(R.layout.fragment_mian,null)
-        view?.find<TextView>(R.id.tv)?.text =arguments?.getString(ARG_TEXT)?:""
         return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        tv.text=arguments?.getString(ARG_TEXT)?:""
+        initData()
+    }
     companion object {
         private val ARG_TEXT = "ARG_TEXT"
 
         fun newInstance(text: String): SampleFragment {
             val args = Bundle()
             args.putString(ARG_TEXT, text)
-
             val sampleFragment = SampleFragment()
             sampleFragment.arguments = args
             return sampleFragment
         }
+    }
+    fun initData(){
+        var  retrofit : Retrofit = Retrofit.Builder()
+                .baseUrl("http://api.dymfilm.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        var service : ApiService= retrofit.create(ApiService::class.java)
+
+        async() {
+            var call  =service.listfilms("1").execute() as Call<film>
+
+//            call.enqueue(object : Callback<film>(){
+//                override fun onFailure(request: Request?, e: IOException?) {
+//
+//                }
+//
+//                override fun onResponse(response: Response?) {
+//                    var statusCode = response?.code()
+//                    var user = response?.body()
+//                }
+//
+//            })
+//
+//                Log.e("list",list.tags.t)
+        }
+
     }
 }

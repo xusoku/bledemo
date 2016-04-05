@@ -19,7 +19,7 @@
     <com.example.xusoku.bledemo.views.viewpagerindicator.FixPageIndicator
         android:id="@+id/indicator"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_measure_86dp"
+        android:layout_height="@dimen/common_measure_70dp"
        />
 
 </LinearLayout>

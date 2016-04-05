@@ -2,11 +2,21 @@ package com.example.xusoku.bledemo
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.View
+import android.widget.TextView
+import com.example.xusoku.bledemo.adpter.base.CommonFragmentAdapter
 import com.example.xusoku.bledemo.base.BaseActivity
+import com.example.xusoku.bledemo.views.HackyViewPager
+import com.example.xusoku.bledemo.views.viewpagerindicator.PageIndicator
+import com.example.xusoku.bledemo.views.viewpagerindicator.scrollbar.ColorBar
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : BaseActivity() {
 
+     val tabDrawables = intArrayOf(R.drawable.main_btn_home_selector, R.drawable.main_btn_film_review_selector, R.drawable.main_btn_price_selector, R.drawable.main_btn_share_ticket_selector)
+     val tabNames = arrayOf("影片", "影评", "比价", "晒票")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,9 +31,38 @@ class MainActivity : BaseActivity() {
     }
 
     override fun findViews() {
+        viewPager.toggleLock()
+        viewPager.setOffscreenPageLimit(4)
     }
 
     override fun initData() {
+
+        val mPriceFragment = SampleFragment.newInstance("wo");
+        val mPriceFragment1 = SampleFragment.newInstance("wo1");
+        val mPriceFragment2 = SampleFragment.newInstance("wo2");
+        val mPriceFragment3 = SampleFragment.newInstance("wo3");
+        val fragments = ArrayList<Fragment>()
+        fragments.add(mPriceFragment)
+        fragments.add(mPriceFragment1)
+        fragments.add(mPriceFragment2)
+        fragments.add(mPriceFragment3)
+        viewPager.setAdapter(CommonFragmentAdapter(supportFragmentManager, fragments))
+        indicator.setViewPager(viewPager, 0)
+        indicator.setIndicatorAdapter(object : PageIndicator.IndicatorAdapter{
+            override fun getIndicatorView(position: Int): View? {
+                val textView = mInflater.inflate(R.layout.layout_main_tab_item, null) as TextView
+                textView.setText(tabNames[position])
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, tabDrawables[position], 0, 0)
+                return textView
+            }
+            override fun onPageScrolled(view: View?, position: Int, selectPercent: Float) {
+            }
+
+        })
+
+        val colorBar = ColorBar(mContext, mContext.resources.getColor(R.color.red_color))
+        //        colorBar.setWidth(DimenUtils.dp2px(mContext, 80));
+        indicator.setScrollBar(colorBar)
     }
 
     override fun setListener() {

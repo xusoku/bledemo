@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,7 @@ import com.example.xusoku.bledemo.util.AppManager;
 import com.example.xusoku.bledemo.util.LogUtils;
 
 
-public abstract class BaseActivity extends Activity
+public abstract class BaseActivity extends AppCompatActivity
 {
 
     public Context mContext;
