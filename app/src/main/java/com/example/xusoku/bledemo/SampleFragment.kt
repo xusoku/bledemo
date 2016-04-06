@@ -87,21 +87,22 @@ class SampleFragment : BaseFragment() {
                     onFragmentLoadingFailed()
                 }
 
+
                 override fun onResponse(response: retrofit.Response<film>?, retrofit: Retrofit?) {
-                    onFragmentLoadingSuccess()
-                    var film=response
+                    onFragmentLoadingSuccess() 
+                    var film=response?.body()
+                  Log.e("user",""+film?.tags?.get(0).toString())
                 }
             })
-//            uiThread {
-//                if(film!=null){
-//                    onFragmentLoadingSuccess()
-//                }else{
-//                    onFragmentLoadingFailed()
-//                }
-//                //                        film?.let {
-//                //                            onFragmentLoadingSuccess()
-//                //                        }
-//                Log.e("user",""+film.tags.get(0).toString())
+            //            uiThread {
+            //                if(film!=null){
+            //                    onFragmentLoadingSuccess()
+            //                }else{
+            //                    onFragmentLoadingFailed()
+            //                }
+            //                //                        film?.let {
+            //                //                            onFragmentLoadingSuccess()
+            //                //                        }
 //            }
         }
     }
