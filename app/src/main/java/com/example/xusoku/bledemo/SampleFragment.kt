@@ -25,12 +25,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.xusoku.bledemo.api.ApiService
+import com.example.xusoku.bledemo.base.BaseFragment
 import com.example.xusoku.bledemo.model.film
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
+import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_mian.*
 import org.jetbrains.anko.async
+import org.jetbrains.anko.uiThread
 import retrofit.Call
 import retrofit.GsonConverterFactory
 import retrofit.Retrofit
@@ -38,21 +41,8 @@ import java.io.IOException
 
 /**
  */
-class SampleFragment : Fragment() {
+class SampleFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val textView = TextView(activity)
-        textView.text = arguments?.getString(ARG_TEXT)?:""
-        var view = inflater?.inflate(R.layout.fragment_mian,null)
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        tv.text=arguments?.getString(ARG_TEXT)?:""
-        initData()
-    }
     companion object {
         private val ARG_TEXT = "ARG_TEXT"
 
@@ -64,31 +54,60 @@ class SampleFragment : Fragment() {
             return sampleFragment
         }
     }
-    fun initData(){
+
+    override fun initVariable() {
+        var str=arguments?.getString(ARG_TEXT)?:""
+        Log.e("str",""+str)
+    }
+
+    override fun setContentView(): Int {
+        return  R.layout.fragment_mian
+    }
+
+    override fun findViews(view: View?) {
+    }
+
+
+    override fun initData() {
+        startFragmentLoading()
+    }
+
+    override fun onFragmentLoading() {
+        super.onFragmentLoading()
         var  retrofit : Retrofit = Retrofit.Builder()
                 .baseUrl("http://api.dymfilm.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         var service : ApiService= retrofit.create(ApiService::class.java)
-
         async() {
-            var call  =service.listfilms("1").execute() as Call<film>
+            var call  =service.listfilms("1")
+//            var film = call.execute().body()
+            call.enqueue(object: retrofit.Callback<film>{
+                override fun onFailure(t: Throwable?) {
+                    onFragmentLoadingFailed()
+                }
 
-//            call.enqueue(object : Callback<film>(){
-//                override fun onFailure(request: Request?, e: IOException?) {
-//
+                override fun onResponse(response: retrofit.Response<film>?, retrofit: Retrofit?) {
+                    onFragmentLoadingSuccess()
+                    var film=response
+                }
+            })
+//            uiThread {
+//                if(film!=null){
+//                    onFragmentLoadingSuccess()
+//                }else{
+//                    onFragmentLoadingFailed()
 //                }
-//
-//                override fun onResponse(response: Response?) {
-//                    var statusCode = response?.code()
-//                    var user = response?.body()
-//                }
-//
-//            })
-//
-//                Log.e("list",list.tags.t)
+//                //                        film?.let {
+//                //                            onFragmentLoadingSuccess()
+//                //                        }
+//                Log.e("user",""+film.tags.get(0).toString())
+//            }
         }
+    }
+    override fun setListener() {
 
     }
+
+
 }
