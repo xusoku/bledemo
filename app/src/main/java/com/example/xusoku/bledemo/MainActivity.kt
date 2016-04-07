@@ -22,8 +22,8 @@ import java.util.*
 
 class MainActivity : BaseActivity() {
 
-     val tabDrawables = intArrayOf(R.drawable.main_btn_home_selector, R.drawable.main_btn_film_review_selector, R.drawable.main_btn_price_selector, R.drawable.main_btn_share_ticket_selector)
-     val tabNames = arrayOf("福利", "福利", "福利", "福利")
+     val tabDrawables = intArrayOf(R.drawable.main_btn_home_selector,R.drawable.main_btn_home_selector,R.drawable.main_btn_home_selector, R.drawable.main_btn_film_review_selector, R.drawable.main_btn_price_selector, R.drawable.main_btn_share_ticket_selector)
+     val tabNames = arrayOf("性感", "韩日", "丝袜", "写真","清纯","车模")
 
     override fun setLayoutView(): Int {
        return  R.layout.activity_main
@@ -36,19 +36,22 @@ class MainActivity : BaseActivity() {
     override fun findViews() {
         viewPager.toggleLock()
         viewPager.setOffscreenPageLimit(4)
-        indicator.visibility=View.GONE
     }
 
     override fun initData() {
-        val mPriceFragment = SampleFragment.newInstance("wo");
-        val mPriceFragment1 = SampleFragment.newInstance("wo1");
-        val mPriceFragment2 = SampleFragment.newInstance("wo2");
-        val mPriceFragment3 = SampleFragment.newInstance("wo3");
+        val mPriceFragment = SampleFragment.newInstance(1);
+        val mPriceFragment1 = SampleFragment.newInstance(2);
+        val mPriceFragment2 = SampleFragment.newInstance(3);
+        val mPriceFragment3 = SampleFragment.newInstance(5);
+        val mPriceFragment4 = SampleFragment.newInstance(6);
+        val mPriceFragment5 = SampleFragment.newInstance(7);
         val fragments = ArrayList<Fragment>()
         fragments.add(mPriceFragment)
         fragments.add(mPriceFragment1)
         fragments.add(mPriceFragment2)
         fragments.add(mPriceFragment3)
+        fragments.add(mPriceFragment4)
+        fragments.add(mPriceFragment5)
         viewPager.setAdapter(CommonFragmentAdapter(supportFragmentManager, fragments))
         indicator.setViewPager(viewPager, 0)
         title=tabNames[0]

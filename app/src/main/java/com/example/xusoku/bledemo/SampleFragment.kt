@@ -43,23 +43,25 @@ import java.util.*
  */
 class SampleFragment : BaseFragment() {
     override fun setListener() {
+
     }
 
     companion object {
         private val ARG_TEXT = "ARG_TEXT"
 
-        fun newInstance(text: String): SampleFragment {
+        fun newInstance(text: Int): SampleFragment {
             val args = Bundle()
-            args.putString(ARG_TEXT, text)
+            args.putInt(ARG_TEXT, text)
             val sampleFragment = SampleFragment()
             sampleFragment.arguments = args
             return sampleFragment
         }
     }
 
+     var type : Int =1
     override fun initVariable() {
-        var str=arguments?.getString(ARG_TEXT)?:""
-        Log.e("str",""+str)
+        type=arguments?.getInt(ARG_TEXT)?:0
+        Log.e("str",""+type)
     }
 
 
@@ -99,7 +101,7 @@ class SampleFragment : BaseFragment() {
         override fun onLoading(page: Int) {
             async() {
                 Log.e("福利","==="+(page+1))
-                var call = service.listGrils(page+1,pageNum)
+                var call = service.listGrils(type,page+1,pageNum)
                 call.enqueue(object : Callback<Grils> {
                     override fun onFailure(t: Throwable?) {
                         //                            onFragmentLoadingFailed()
