@@ -18,30 +18,32 @@
 package com.example.xusoku.bledemo
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
+import cn.kejin.gitbook.controllers.PageController
+import cn.kejin.gitbook.controllers.PageDriver
+import cn.nekocode.kotgo.sample.presentation.gotoMainPage
+import com.example.xusoku.bledemo.adpter.base.FilmAdapter
 import com.example.xusoku.bledemo.api.ApiService
 import com.example.xusoku.bledemo.base.BaseFragment
-import com.example.xusoku.bledemo.model.film
-import com.squareup.okhttp.Callback
-import com.squareup.okhttp.Request
-import com.squareup.okhttp.Response
-import kotlinx.android.synthetic.main.activity_base.*
+import com.example.xusoku.bledemo.util.NetWorkUtils
+import com.example.xusoku.bledemo.views.recyclerview.ExRcvAdapterWrapper
+import com.example.xusoku.bledemo.views.recyclerview.LoadMoreRecyclerView
 import kotlinx.android.synthetic.main.fragment_mian.*
 import org.jetbrains.anko.async
-import org.jetbrains.anko.uiThread
-import retrofit.Call
+import retrofit.Callback
 import retrofit.GsonConverterFactory
+import retrofit.Response
 import retrofit.Retrofit
-import java.io.IOException
+import java.util.*
 
 /**
  */
 class SampleFragment : BaseFragment() {
+    override fun setListener() {
+    }
 
     companion object {
         private val ARG_TEXT = "ARG_TEXT"
@@ -60,6 +62,8 @@ class SampleFragment : BaseFragment() {
         Log.e("str",""+str)
     }
 
+
+
     override fun setContentView(): Int {
         return  R.layout.fragment_mian
     }
@@ -67,48 +71,64 @@ class SampleFragment : BaseFragment() {
     override fun findViews(view: View?) {
     }
 
-
+    var list: MutableList<Grils.Gril> = arrayListOf()
+    var filmadapter: FilmAdapter ?=null
     override fun initData() {
+
+       var mStaggerLayoutManager=  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.setLayoutManager(mStaggerLayoutManager)
+        filmadapter = FilmAdapter(activity)
+        recyclerView.adapter= filmadapter
+
+        pageDriver = PageDriver(null, recyclerView,pageCallback)
         startFragmentLoading()
     }
 
+    val pageNum=10;
+    var count : Int=1
+
     override fun onFragmentLoading() {
         super.onFragmentLoading()
-        var  retrofit : Retrofit = Retrofit.Builder()
-                .baseUrl("http://api.dymfilm.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        var service : ApiService= retrofit.create(ApiService::class.java)
-        async() {
-            var call  =service.listfilms("1")
-//            var film = call.execute().body()
-            call.enqueue(object: retrofit.Callback<film>{
-                override fun onFailure(t: Throwable?) {
-                    onFragmentLoadingFailed()
-                }
 
+        pageDriver.refresh()
+    }
 
-                override fun onResponse(response: retrofit.Response<film>?, retrofit: Retrofit?) {
-                    onFragmentLoadingSuccess() 
-                    var film=response?.body()
-                  Log.e("user",""+film?.tags?.get(0).toString())
-                }
-            })
-            //            uiThread {
-            //                if(film!=null){
-            //                    onFragmentLoadingSuccess()
-            //                }else{
-            //                    onFragmentLoadingFailed()
-            //                }
-            //                //                        film?.let {
-            //                //                            onFragmentLoadingSuccess()
-            //                //                        }
-//            }
+    lateinit var pageDriver : PageDriver
+
+    val pageCallback =  object : PageDriver.ICallback {
+        override fun onLoading(page: Int) {
+            async() {
+                Log.e("福利","==="+(page+1))
+                var call = service.listGrils(page+1,pageNum)
+                call.enqueue(object : Callback<Grils> {
+                    override fun onFailure(t: Throwable?) {
+                        //                            onFragmentLoadingFailed()
+                        pageDriver.finish(PageController.Result.FAILED)
+                    }
+
+                    override fun onResponse(response: Response<Grils>?, retrofit: Retrofit?) {
+                        onFragmentLoadingSuccess()
+                        var gril = response?.body()
+                        val num=gril?.tngou?.size?:0
+                        if (gril!= null) {
+                            filmadapter?.addAll(gril.tngou, false)
+                        }
+
+                        if (num == pageNum) {
+                            pageDriver.finish(PageController.Result.SUCCESS)
+                        }
+                        else {
+                            pageDriver.finish(PageController.Result.NO_MORE)
+                        }
+                    }
+                })
+            }
         }
-    }
-    override fun setListener() {
+
+        override fun onRefreshFailed() {
+            onFragmentLoadingFailed()
+        }
 
     }
-
 
 }

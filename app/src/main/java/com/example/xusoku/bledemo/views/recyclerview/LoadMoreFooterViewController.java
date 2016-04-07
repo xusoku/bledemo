@@ -27,7 +27,7 @@ public class LoadMoreFooterViewController
     public LoadMoreFooterViewController(@NonNull Context context)
     {
         mRootView = View.inflate(context, R.layout.layout_load_more_footer, null);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
         mRootView.setLayoutParams(params);
         initializeFooterView();
     }

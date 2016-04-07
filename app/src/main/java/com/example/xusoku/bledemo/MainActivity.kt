@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.TextView
 import com.example.xusoku.bledemo.adpter.base.CommonFragmentAdapter
 import com.example.xusoku.bledemo.base.BaseActivity
@@ -22,12 +23,7 @@ import java.util.*
 class MainActivity : BaseActivity() {
 
      val tabDrawables = intArrayOf(R.drawable.main_btn_home_selector, R.drawable.main_btn_film_review_selector, R.drawable.main_btn_price_selector, R.drawable.main_btn_share_ticket_selector)
-     val tabNames = arrayOf("影片", "影评", "比价", "晒票")
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+     val tabNames = arrayOf("福利", "福利", "福利", "福利")
 
     override fun setLayoutView(): Int {
        return  R.layout.activity_main
@@ -38,13 +34,12 @@ class MainActivity : BaseActivity() {
 
 
     override fun findViews() {
-
+        viewPager.toggleLock()
         viewPager.setOffscreenPageLimit(4)
-
+        indicator.visibility=View.GONE
     }
 
     override fun initData() {
-
         val mPriceFragment = SampleFragment.newInstance("wo");
         val mPriceFragment1 = SampleFragment.newInstance("wo1");
         val mPriceFragment2 = SampleFragment.newInstance("wo2");

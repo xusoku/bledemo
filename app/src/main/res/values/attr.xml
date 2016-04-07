@@ -5,4 +5,9 @@
         <attr name="customTypeface" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="ExRecyclerView">
+        <attr name="header" format="reference" />
+        <attr name="footer" format="reference" />
+    </declare-styleable>
+
 </resources>

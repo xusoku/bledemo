@@ -72,7 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity
     {
         mContext = getApplicationContext();
         mActivity=this;
-        setTranslucentStatusBar(R.color.colorPrimary);
+//        setTranslucentStatusBar(R.color.colorPrimary);
         mInflater = getLayoutInflater();
         // topbar相关
         layTopBar = (RelativeLayout) findViewById(R.id.layTopBar);

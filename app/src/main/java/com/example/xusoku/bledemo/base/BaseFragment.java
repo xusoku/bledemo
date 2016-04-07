@@ -17,6 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.xusoku.bledemo.R;
+import com.example.xusoku.bledemo.api.ApiService;
+
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
 
 
 /**
@@ -37,6 +41,7 @@ public abstract class BaseFragment extends Fragment
     private boolean isViewCreated = false;
     private boolean isInit = false;
 
+    public  ApiService service=null;
     @Override
     public void onAttach(Activity activity)
     {
@@ -50,6 +55,13 @@ public abstract class BaseFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         initVariable();
+
+
+        Retrofit retrofit=new Retrofit.Builder()
+            .baseUrl("http://www.tngou.net/")
+            .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        service  = retrofit.create(ApiService.class);
     }
 
     @SuppressWarnings("unchecked")

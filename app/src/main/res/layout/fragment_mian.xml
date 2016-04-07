@@ -4,14 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"/>
-    <com.example.xusoku.bledemo.views.recyclerview.LoadMoreRecyclerView
+    <com.example.xusoku.bledemo.views.recyclerview.ExRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.example.xusoku.bledemo.views.recyclerview.LoadMoreRecyclerView>
+    </com.example.xusoku.bledemo.views.recyclerview.ExRecyclerView>
 
 </RelativeLayout>
