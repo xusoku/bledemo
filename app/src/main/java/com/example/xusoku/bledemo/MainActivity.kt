@@ -34,8 +34,8 @@ class MainActivity : BaseActivity() {
 
 
     override fun findViews() {
-        viewPager.toggleLock()
-        viewPager.setOffscreenPageLimit(4)
+//        viewPager.toggleLock()
+        viewPager.setOffscreenPageLimit(6)
     }
 
     override fun initData() {

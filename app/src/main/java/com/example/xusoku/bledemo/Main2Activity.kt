@@ -1,9 +1,14 @@
 package com.example.xusoku.bledemo
 
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import cn.kejin.android.views.XImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.example.xusoku.bledemo.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main2.*
 import org.jetbrains.anko.act
@@ -25,9 +30,17 @@ class Main2Activity : BaseActivity() {
     override fun initData() {
         Glide.with(act)
                 .load(pic)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
+//        .into(big_iv)
+                .into(object : SimpleTarget<Bitmap>(){
+                    override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
 
-                .into(big_iv)
+                         big_iv.setImage(resource)
+
+                    }
+                })
     }
 
     override fun setListener() {

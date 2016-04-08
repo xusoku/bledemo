@@ -77,7 +77,7 @@ class SampleFragment : BaseFragment() {
     var filmadapter: FilmAdapter ?=null
     override fun initData() {
 
-       var mStaggerLayoutManager=  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+       val mStaggerLayoutManager=  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.setLayoutManager(mStaggerLayoutManager)
         filmadapter = FilmAdapter(activity)
         recyclerView.adapter= filmadapter
@@ -113,7 +113,7 @@ class SampleFragment : BaseFragment() {
                         var gril = response?.body()
                         val num=gril?.tngou?.size?:0
                         if (gril!= null) {
-                            filmadapter?.addAll(gril.tngou, false)
+                            filmadapter?.addAll(gril.tngou)
                         }
 
                         if (num == pageNum) {

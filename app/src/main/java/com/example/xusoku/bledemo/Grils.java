@@ -19,5 +19,6 @@ import java.util.ArrayList;
         public  String size="";
         public  String time="";
         public  String title="";
+        public  int height=-1;
         }
     }
